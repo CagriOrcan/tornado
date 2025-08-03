@@ -8,7 +8,7 @@ import { ProfileCard } from '@/components/ui/ProfileCard';
 import { GradientButton } from '@/components/ui/GradientButton';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { Settings, Filter } from 'lucide-react-native';
+import { Settings, ListFilter as Filter } from 'lucide-react-native';
 
 const { width } = Dimensions.get('window');
 

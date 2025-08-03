@@ -8,7 +8,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { GradientButton } from '@/components/ui/GradientButton';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { Settings, Edit3, Camera, Star, MapPin, Briefcase } from 'lucide-react-native';
+import { Settings, CreditCard as Edit3, Camera, Star, MapPin, Briefcase } from 'lucide-react-native';
 
 export default function ProfileScreen() {
   const colorScheme = useColorScheme() ?? 'light';
