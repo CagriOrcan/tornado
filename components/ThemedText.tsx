@@ -1,11 +1,11 @@
 import { StyleSheet, Text, type TextProps } from 'react-native';
-
 import { useThemeColor } from '@/hooks/useThemeColor';
+import { Typography } from '@/constants/Colors';
 
 export type ThemedTextProps = TextProps & {
   lightColor?: string;
   darkColor?: string;
-  type?: 'default' | 'title' | 'subtitle' | 'caption' | 'button' | 'link' | 'hero';
+  type?: 'default' | 'title' | 'subtitle' | 'caption' | 'button' | 'link' | 'hero' | 'display' | 'body' | 'label';
 };
 
 export function ThemedText({
@@ -28,6 +28,9 @@ export function ThemedText({
         type === 'button' ? styles.button : undefined,
         type === 'link' ? styles.link : undefined,
         type === 'hero' ? styles.hero : undefined,
+        type === 'display' ? styles.display : undefined,
+        type === 'body' ? styles.body : undefined,
+        type === 'label' ? styles.label : undefined,
         style,
       ]}
       {...rest}
@@ -37,43 +40,62 @@ export function ThemedText({
 
 const styles = StyleSheet.create({
   default: {
-    fontSize: 16,
-    lineHeight: 24,
-    fontFamily: 'Inter-Regular',
+    fontSize: Typography.fontSize.base,
+    lineHeight: Typography.fontSize.base * Typography.lineHeight.normal,
+    fontFamily: Typography.fontFamily.regular,
   },
   title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    lineHeight: 34,
-    fontFamily: 'Inter-Bold',
+    fontSize: Typography.fontSize['2xl'],
+    lineHeight: Typography.fontSize['2xl'] * Typography.lineHeight.tight,
+    fontFamily: Typography.fontFamily.bold,
+    letterSpacing: -0.5,
   },
   subtitle: {
-    fontSize: 20,
-    fontWeight: '600',
-    lineHeight: 28,
-    fontFamily: 'Inter-SemiBold',
+    fontSize: Typography.fontSize.lg,
+    lineHeight: Typography.fontSize.lg * Typography.lineHeight.normal,
+    fontFamily: Typography.fontFamily.semiBold,
+    letterSpacing: -0.25,
   },
   caption: {
-    fontSize: 14,
-    lineHeight: 20,
-    fontFamily: 'Inter-Regular',
+    fontSize: Typography.fontSize.sm,
+    lineHeight: Typography.fontSize.sm * Typography.lineHeight.normal,
+    fontFamily: Typography.fontFamily.regular,
   },
   button: {
-    fontSize: 16,
-    fontWeight: '600',
-    lineHeight: 24,
-    fontFamily: 'Inter-SemiBold',
+    fontSize: Typography.fontSize.base,
+    lineHeight: Typography.fontSize.base * Typography.lineHeight.tight,
+    fontFamily: Typography.fontFamily.semiBold,
+    letterSpacing: 0.25,
   },
   link: {
-    fontSize: 16,
-    lineHeight: 24,
-    fontFamily: 'Inter-Medium',
+    fontSize: Typography.fontSize.base,
+    lineHeight: Typography.fontSize.base * Typography.lineHeight.normal,
+    fontFamily: Typography.fontFamily.medium,
     color: '#FF8C42',
+    textDecorationLine: 'underline',
   },
   hero: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    lineHeight: 40,
-    fontFamily: 'Inter-Bold',
+    fontSize: Typography.fontSize['4xl'],
+    lineHeight: Typography.fontSize['4xl'] * Typography.lineHeight.tight,
+    fontFamily: Typography.fontFamily.bold,
+    letterSpacing: -1,
+  },
+  display: {
+    fontSize: Typography.fontSize['5xl'],
+    lineHeight: Typography.fontSize['5xl'] * Typography.lineHeight.tight,
+    fontFamily: Typography.fontFamily.bold,
+    letterSpacing: -1.5,
+  },
+  body: {
+    fontSize: Typography.fontSize.base,
+    lineHeight: Typography.fontSize.base * Typography.lineHeight.relaxed,
+    fontFamily: Typography.fontFamily.regular,
+  },
+  label: {
+    fontSize: Typography.fontSize.sm,
+    lineHeight: Typography.fontSize.sm * Typography.lineHeight.tight,
+    fontFamily: Typography.fontFamily.medium,
+    letterSpacing: 0.5,
+    textTransform: 'uppercase',
   },
 });

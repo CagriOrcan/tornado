@@ -1,141 +1,243 @@
 import React from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { BlurView } from 'expo-blur';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Image } from 'expo-image';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { GradientButton } from '@/components/ui/GradientButton';
-import { Colors } from '@/constants/Colors';
+import { Colors, Spacing, BorderRadius } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { Settings, CreditCard as Edit3, Camera, Star, MapPin, Briefcase } from 'lucide-react-native';
+import { 
+  Settings, 
+  Edit3, 
+  Camera, 
+  Star, 
+  MapPin, 
+  Briefcase, 
+  Heart,
+  MessageCircle,
+  Zap,
+  Award
+} from 'lucide-react-native';
+
+const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 
 export default function ProfileScreen() {
   const colorScheme = useColorScheme() ?? 'light';
   const colors = Colors[colorScheme];
 
+  const profileStats = [
+    { icon: Heart, label: 'Likes Given', value: '127' },
+    { icon: MessageCircle, label: 'Conversations', value: '43' },
+    { icon: Zap, label: 'Tornados', value: '89' },
+    { icon: Award, label: 'Success Rate', value: '92%' },
+  ];
+
+  const interests = ['Photography', 'Cooking', 'Travel', 'Hiking', 'Music', 'Art', 'Coffee', 'Books'];
+
+  const StatCard = ({ stat, index }: { stat: typeof profileStats[0], index: number }) => {
+    const scale = useSharedValue(1);
+
+    const animatedStyle = useAnimatedStyle(() => ({
+      transform: [{ scale: scale.value }],
+    }));
+
+    const handlePress = () => {
+      scale.value = withSpring(0.95, { damping: 15 }, () => {
+        scale.value = withSpring(1);
+      });
+    };
+
+    return (
+      <AnimatedTouchableOpacity
+        style={[animatedStyle]}
+        onPress={handlePress}
+        activeOpacity={1}
+      >
+        <BlurView intensity={30} style={styles.statCardBlur}>
+          <LinearGradient
+            colors={['rgba(255, 255, 255, 0.15)', 'rgba(255, 255, 255, 0.08)']}
+            style={styles.statCard}
+          >
+            <View style={styles.statIcon}>
+              <stat.icon size={20} color={colors.primary} strokeWidth={2.5} />
+            </View>
+            <ThemedText type="title" style={[styles.statValue, { color: colors.textInverse }]}>
+              {stat.value}
+            </ThemedText>
+            <ThemedText type="caption" style={[styles.statLabel, { color: colors.textInverse }]}>
+              {stat.label}
+            </ThemedText>
+          </LinearGradient>
+        </BlurView>
+      </AnimatedTouchableOpacity>
+    );
+  };
+
   return (
     <LinearGradient
-      colors={[colors.background, colors.backgroundSecondary]}
+      colors={colors.gradient.warm}
       style={styles.container}
     >
       <SafeAreaView style={styles.safeArea}>
         {/* Header */}
-        <View style={styles.header}>
-          <ThemedText type="title" style={{ color: colors.primary }}>
-            Profile
-          </ThemedText>
-          <TouchableOpacity>
-            <Settings size={24} color={colors.icon} />
-          </TouchableOpacity>
-        </View>
+        <BlurView intensity={20} style={styles.headerBlur}>
+          <View style={styles.header}>
+            <ThemedText type="hero" style={[styles.headerTitle, { color: colors.textInverse }]}>
+              Profile
+            </ThemedText>
+            <TouchableOpacity style={styles.settingsButton}>
+              <Settings size={24} color={colors.textInverse} strokeWidth={2} />
+            </TouchableOpacity>
+          </View>
+        </BlurView>
 
         <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
           {/* Profile Header */}
           <View style={styles.profileHeader}>
-            <View style={styles.profileImageContainer}>
-              <Image 
-                source={{ uri: 'https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=400' }}
-                style={styles.profileImage}
-              />
-              <TouchableOpacity style={styles.cameraButton}>
-                <LinearGradient
-                  colors={[colors.gradient.start, colors.gradient.end]}
-                  style={styles.cameraGradient}
-                >
-                  <Camera size={16} color="#FFFFFF" />
-                </LinearGradient>
-              </TouchableOpacity>
-            </View>
+            <BlurView intensity={30} style={styles.profileImageBlur}>
+              <View style={styles.profileImageContainer}>
+                <Image 
+                  source={{ uri: 'https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=400' }}
+                  style={styles.profileImage}
+                />
+                <TouchableOpacity style={styles.cameraButton}>
+                  <LinearGradient
+                    colors={colors.gradient.primary}
+                    style={styles.cameraGradient}
+                  >
+                    <Camera size={18} color={colors.textInverse} strokeWidth={2.5} />
+                  </LinearGradient>
+                </TouchableOpacity>
+              </View>
+            </BlurView>
             
-            <ThemedText type="title" style={[styles.profileName, { color: colors.text }]}>
+            <ThemedText type="hero" style={[styles.profileName, { color: colors.textInverse }]}>
               Alex, 28
             </ThemedText>
             
-            <View style={styles.profileStats}>
-              <View style={styles.statItem}>
-                <Star size={16} color={colors.primary} />
-                <ThemedText type="caption" style={{ color: colors.textSecondary }}>
+            <View style={styles.profileMeta}>
+              <View style={styles.profileMetaItem}>
+                <Star size={16} color={colors.primary} strokeWidth={2.5} />
+                <ThemedText type="caption" style={[styles.profileMetaText, { color: colors.textInverse }]}>
                   4.8 Rating
                 </ThemedText>
               </View>
-              <View style={styles.statDivider} />
-              <View style={styles.statItem}>
-                <MapPin size={16} color={colors.primary} />
-                <ThemedText type="caption" style={{ color: colors.textSecondary }}>
-                  2 miles away
+              <View style={styles.metaDivider} />
+              <View style={styles.profileMetaItem}>
+                <MapPin size={16} color={colors.primary} strokeWidth={2.5} />
+                <ThemedText type="caption" style={[styles.profileMetaText, { color: colors.textInverse }]}>
+                  San Francisco
                 </ThemedText>
               </View>
             </View>
           </View>
 
-          {/* Profile Info */}
-          <ThemedView style={[styles.infoCard, { backgroundColor: colors.card }]}>
-            <View style={styles.infoHeader}>
-              <ThemedText type="subtitle" style={{ color: colors.text }}>
-                About Me
-              </ThemedText>
-              <TouchableOpacity>
-                <Edit3 size={20} color={colors.primary} />
-              </TouchableOpacity>
-            </View>
-            <ThemedText type="default" style={[styles.bio, { color: colors.textSecondary }]}>
-              Photographer by day, chef by night. Love capturing beautiful moments and cooking amazing meals. Always up for new adventures and meeting interesting people!
+          {/* Stats Grid */}
+          <View style={styles.statsSection}>
+            <ThemedText type="subtitle" style={[styles.sectionTitle, { color: colors.textInverse }]}>
+              Your Stats
             </ThemedText>
-          </ThemedView>
-
-          {/* Interests */}
-          <ThemedView style={[styles.infoCard, { backgroundColor: colors.card }]}>
-            <View style={styles.infoHeader}>
-              <ThemedText type="subtitle" style={{ color: colors.text }}>
-                Interests
-              </ThemedText>
-              <TouchableOpacity>
-                <Edit3 size={20} color={colors.primary} />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.interestsContainer}>
-              {['Photography', 'Cooking', 'Travel', 'Hiking', 'Music', 'Art'].map((interest) => (
-                <View key={interest} style={[styles.interestTag, { borderColor: colors.primary }]}>
-                  <ThemedText type="caption" style={{ color: colors.primary }}>
-                    {interest}
-                  </ThemedText>
-                </View>
+            <View style={styles.statsGrid}>
+              {profileStats.map((stat, index) => (
+                <StatCard key={stat.label} stat={stat} index={index} />
               ))}
             </View>
-          </ThemedView>
+          </View>
+
+          {/* About Section */}
+          <BlurView intensity={30} style={styles.sectionBlur}>
+            <LinearGradient
+              colors={['rgba(255, 255, 255, 0.1)', 'rgba(255, 255, 255, 0.05)']}
+              style={styles.infoCard}
+            >
+              <View style={styles.infoHeader}>
+                <ThemedText type="subtitle" style={[styles.infoTitle, { color: colors.textInverse }]}>
+                  About Me
+                </ThemedText>
+                <TouchableOpacity>
+                  <Edit3 size={20} color={colors.primary} strokeWidth={2.5} />
+                </TouchableOpacity>
+              </View>
+              <ThemedText type="body" style={[styles.bio, { color: colors.textInverse }]}>
+                Photographer by day, chef by night. Love capturing beautiful moments and cooking amazing meals. Always up for new adventures and meeting interesting people who value genuine connections!
+              </ThemedText>
+            </LinearGradient>
+          </BlurView>
+
+          {/* Interests */}
+          <BlurView intensity={30} style={styles.sectionBlur}>
+            <LinearGradient
+              colors={['rgba(255, 255, 255, 0.1)', 'rgba(255, 255, 255, 0.05)']}
+              style={styles.infoCard}
+            >
+              <View style={styles.infoHeader}>
+                <ThemedText type="subtitle" style={[styles.infoTitle, { color: colors.textInverse }]}>
+                  Interests
+                </ThemedText>
+                <TouchableOpacity>
+                  <Edit3 size={20} color={colors.primary} strokeWidth={2.5} />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.interestsContainer}>
+                {interests.map((interest) => (
+                  <BlurView key={interest} intensity={20} style={styles.interestTagBlur}>
+                    <View style={[styles.interestTag, { borderColor: colors.primary }]}>
+                      <ThemedText type="caption" style={[styles.interestText, { color: colors.textInverse }]}>
+                        {interest}
+                      </ThemedText>
+                    </View>
+                  </BlurView>
+                ))}
+              </View>
+            </LinearGradient>
+          </BlurView>
 
           {/* Work & Education */}
-          <ThemedView style={[styles.infoCard, { backgroundColor: colors.card }]}>
-            <View style={styles.infoHeader}>
-              <ThemedText type="subtitle" style={{ color: colors.text }}>
-                Work & Education
-              </ThemedText>
-              <TouchableOpacity>
-                <Edit3 size={20} color={colors.primary} />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.workInfo}>
+          <BlurView intensity={30} style={styles.sectionBlur}>
+            <LinearGradient
+              colors={['rgba(255, 255, 255, 0.1)', 'rgba(255, 255, 255, 0.05)']}
+              style={styles.infoCard}
+            >
+              <View style={styles.infoHeader}>
+                <ThemedText type="subtitle" style={[styles.infoTitle, { color: colors.textInverse }]}>
+                  Work & Education
+                </ThemedText>
+                <TouchableOpacity>
+                  <Edit3 size={20} color={colors.primary} strokeWidth={2.5} />
+                </TouchableOpacity>
+              </View>
               <View style={styles.workItem}>
-                <Briefcase size={16} color={colors.primary} />
-                <ThemedText type="default" style={{ color: colors.text }}>
+                <Briefcase size={18} color={colors.primary} strokeWidth={2.5} />
+                <ThemedText type="default" style={[styles.workText, { color: colors.textInverse }]}>
                   Senior Photographer at Creative Studio
                 </ThemedText>
               </View>
-            </View>
-          </ThemedView>
+            </LinearGradient>
+          </BlurView>
 
           {/* Action Buttons */}
           <View style={styles.actionButtons}>
             <GradientButton
               title="Edit Profile"
               onPress={() => console.log('Edit profile')}
+              size="lg"
+              icon={<Edit3 size={20} color={colors.textInverse} />}
               style={styles.editButton}
             />
             <GradientButton
               title="Boost Profile"
               onPress={() => console.log('Boost profile')}
               variant="secondary"
+              size="lg"
+              icon={<Zap size={20} color={colors.primary} />}
               style={styles.boostButton}
             />
           </View>
@@ -152,114 +254,184 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
   },
+  headerBlur: {
+    borderBottomLeftRadius: BorderRadius.xl,
+    borderBottomRightRadius: BorderRadius.xl,
+    overflow: 'hidden',
+  },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
+    paddingHorizontal: Spacing.xl,
+    paddingVertical: Spacing.lg,
+  },
+  headerTitle: {
+    fontWeight: '900',
+  },
+  settingsButton: {
+    padding: Spacing.sm,
   },
   scrollView: {
     flex: 1,
   },
   profileHeader: {
     alignItems: 'center',
-    paddingHorizontal: 20,
-    marginBottom: 32,
+    paddingHorizontal: Spacing.xl,
+    paddingVertical: Spacing.xxxl,
+  },
+  profileImageBlur: {
+    borderRadius: BorderRadius.full,
+    overflow: 'hidden',
+    marginBottom: Spacing.xl,
   },
   profileImageContainer: {
     position: 'relative',
-    marginBottom: 16,
+    padding: Spacing.sm,
   },
   profileImage: {
     width: 120,
     height: 120,
-    borderRadius: 60,
+    borderRadius: BorderRadius.full,
   },
   cameraButton: {
     position: 'absolute',
-    bottom: 0,
-    right: 0,
-    borderRadius: 16,
+    bottom: Spacing.sm,
+    right: Spacing.sm,
+    borderRadius: BorderRadius.full,
     overflow: 'hidden',
   },
   cameraGradient: {
-    width: 32,
-    height: 32,
+    width: 36,
+    height: 36,
     justifyContent: 'center',
     alignItems: 'center',
   },
   profileName: {
-    marginBottom: 12,
-    fontFamily: 'Inter-Bold',
+    marginBottom: Spacing.md,
+    fontWeight: '900',
+    textAlign: 'center',
   },
-  profileStats: {
+  profileMeta: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 16,
+    gap: Spacing.lg,
   },
-  statItem: {
+  profileMetaItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    gap: Spacing.xs,
   },
-  statDivider: {
+  profileMetaText: {
+    opacity: 0.9,
+    fontWeight: '500',
+  },
+  metaDivider: {
     width: 1,
     height: 16,
-    backgroundColor: '#E5E5E5',
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+  },
+  statsSection: {
+    marginBottom: Spacing.xxxl,
+  },
+  sectionTitle: {
+    paddingHorizontal: Spacing.xl,
+    marginBottom: Spacing.lg,
+    fontWeight: '700',
+    opacity: 0.9,
+  },
+  statsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    paddingHorizontal: Spacing.xl,
+    gap: Spacing.md,
+  },
+  statCardBlur: {
+    width: '48%',
+    borderRadius: BorderRadius.lg,
+    overflow: 'hidden',
+  },
+  statCard: {
+    padding: Spacing.lg,
+    alignItems: 'center',
+    gap: Spacing.sm,
+  },
+  statIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: BorderRadius.full,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  statValue: {
+    fontWeight: '800',
+  },
+  statLabel: {
+    opacity: 0.8,
+    textAlign: 'center',
+    fontSize: 11,
+  },
+  sectionBlur: {
+    marginHorizontal: Spacing.xl,
+    marginBottom: Spacing.lg,
+    borderRadius: BorderRadius.xl,
+    overflow: 'hidden',
   },
   infoCard: {
-    marginHorizontal: 20,
-    marginBottom: 16,
-    padding: 20,
-    borderRadius: 16,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 4,
+    padding: Spacing.xl,
   },
   infoHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: Spacing.lg,
+  },
+  infoTitle: {
+    fontWeight: '700',
   },
   bio: {
-    lineHeight: 22,
-    fontFamily: 'Inter-Regular',
+    lineHeight: 24,
+    opacity: 0.9,
   },
   interestsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8,
+    gap: Spacing.sm,
+  },
+  interestTagBlur: {
+    borderRadius: BorderRadius.md,
+    overflow: 'hidden',
   },
   interestTag: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
     borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.3)',
   },
-  workInfo: {
-    gap: 12,
+  interestText: {
+    fontWeight: '500',
+    opacity: 0.9,
   },
   workItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: Spacing.md,
+  },
+  workText: {
+    flex: 1,
+    opacity: 0.9,
+    fontWeight: '500',
   },
   actionButtons: {
-    paddingHorizontal: 20,
-    paddingBottom: 32,
-    gap: 12,
+    paddingHorizontal: Spacing.xl,
+    paddingBottom: Spacing.xxxl,
+    gap: Spacing.lg,
   },
   editButton: {
-    marginBottom: 8,
+    // Additional styling if needed
   },
   boostButton: {
-    marginBottom: 8,
+    // Additional styling if needed
   },
 });
