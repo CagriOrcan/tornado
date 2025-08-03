@@ -1,26 +1,49 @@
 /**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
+ * Dating App Color Palette
  */
 
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
+const primaryColor = '#FF8C42';
+const secondaryColor = '#FFD3B5';
+const gradientStart = '#FF8C42';
+const gradientEnd = '#E85D04';
 
 export const Colors = {
   light: {
-    text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
+    text: '#1A1A1A',
+    textSecondary: '#666666',
+    background: '#FFFFFF',
+    backgroundSecondary: '#F8F9FA',
+    primary: primaryColor,
+    secondary: secondaryColor,
+    gradient: {
+      start: gradientStart,
+      end: gradientEnd,
+    },
+    tint: primaryColor,
+    icon: '#666666',
+    tabIconDefault: '#999999',
+    tabIconSelected: primaryColor,
+    border: '#E5E5E5',
+    card: '#FFFFFF',
+    shadow: 'rgba(0, 0, 0, 0.1)',
   },
   dark: {
-    text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
+    text: '#FFFFFF',
+    textSecondary: '#CCCCCC',
+    background: '#121212',
+    backgroundSecondary: '#1E1E1E',
+    primary: primaryColor,
+    secondary: secondaryColor,
+    gradient: {
+      start: gradientStart,
+      end: gradientEnd,
+    },
+    tint: primaryColor,
+    icon: '#CCCCCC',
+    tabIconDefault: '#666666',
+    tabIconSelected: primaryColor,
+    border: '#333333',
+    card: '#1E1E1E',
+    shadow: 'rgba(0, 0, 0, 0.3)',
   },
 };
