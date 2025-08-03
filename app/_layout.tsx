@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { useAuthStore } from '../store/auth';
-import { usePushNotifications } from '../hooks/usePushNotifications';
+import { NotificationProvider } from '../contexts/NotificationContext';
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -17,7 +17,6 @@ export default function RootLayout() {
   const { session, checkUser } = useAuthStore();
   const segments = useSegments();
   const router = useRouter();
-  usePushNotifications();
 
   useEffect(() => {
     checkUser();
@@ -41,12 +40,16 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <NotificationProvider>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+          <Stack.Screen name="(chat)" options={{ headerShown: false }} />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+        <StatusBar style="auto" />
+      </ThemeProvider>
+    </NotificationProvider>
   );
 }
