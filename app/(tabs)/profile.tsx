@@ -14,18 +14,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { GradientButton } from '@/components/ui/GradientButton';
 import { Colors, Spacing, BorderRadius } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { 
-  Settings, 
-  Edit3, 
-  Camera, 
-  Star, 
-  MapPin, 
-  Briefcase, 
-  Heart,
-  MessageCircle,
-  Zap,
-  Award
-} from 'lucide-react-native';
+import { Settings, CreditCard as Edit3, Camera, Star, MapPin, Briefcase, Heart, MessageCircle, Zap, Award } from 'lucide-react-native';
 
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 

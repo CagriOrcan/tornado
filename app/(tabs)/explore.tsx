@@ -16,7 +16,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { GradientButton } from '@/components/ui/GradientButton';
 import { Colors, Spacing, BorderRadius } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { MapPin, Calendar, Users, Sparkles, TrendingUp, Filter } from 'lucide-react-native';
+import { MapPin, Calendar, Users, Sparkles, TrendingUp, ListFilter as Filter } from 'lucide-react-native';
 
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 
